@@ -6,11 +6,32 @@ This is a port of the [discourse/email_reply_trimmer](https://github.com/discour
 
 Install via Composer:
 
+```bash
 composer require andrifix/email-reply-trimmer
+```
 
 # Usage
 
 To trim replies:
-
+```php
 $trimmed_body = EmailReplyTrimmer::trim($email_body);
+```
 
+You can also split the trimmed content and the elided part (the removed reply):
+
+```php
+[$trimmedBody, $elidedContent] = EmailReplyTrimmer::trim($emailBody, true);
+```
+
+To extract the first embedded email section:
+
+```php
+$extracted = EmailReplyTrimmer::extractEmbeddedEmail($emailBodyWithEmbedded);
+if ($extracted) {
+    [$embeddedEmail, $beforeEmbedded] = $extracted;
+    echo "Text Before Embedded Email: $beforeEmbedded\n";
+    echo "Embedded Email $embeddedEmail:\n";
+} else {
+    echo "No embedded email found.";
+}
+```
