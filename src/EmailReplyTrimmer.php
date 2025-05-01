@@ -205,7 +205,7 @@ class EmailReplyTrimmer
             $startIndex = intval($matches[0][1]);
             // Exception for quoted embedded emails (like macOS Mail)
             $embeddedLines = array_slice($lines, $startIndex + 1);
-            if (!empty($embeddedLines) && QuoteMatcher::match($embeddedLines[0])) {
+            if (!empty($embeddedLines)) {
                 $embeddedLines = array_map(fn($l) => preg_replace('/^>\s*/u', '', $l), $embeddedLines);
             }
             $embedded = trim(implode("\n", $embeddedLines));
@@ -317,7 +317,7 @@ class EmailReplyTrimmer
                 return $matchedText;
             }, $text);
             if ($text === null) {
-                trigger_error("preg_replace_callback failed in preprocess for regex: " . $regex, E_USER_WARNING);
+                trigger_error("preg_replace_callback failed in preprocess for regex: " . $regex . " error:" . preg_last_error_msg(), E_USER_WARNING);
                 $text = $originalText;
             }
         }
